@@ -5,130 +5,141 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { FcGoogle } from "react-icons/fc";
-import { HiOutlineMail, HiOutlineLockClosed, HiOutlineEye, HiOutlineEyeOff, HiOutlineUser } from "react-icons/hi";
+import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUser } from "react-icons/hi";
 
 export default function RegisterPage() {
-  const { signup, loginWithGoogle } = useAuth();
-  const router = useRouter();
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
-
-  const validate = () => {
-    const errs = {};
-    if (!name.trim()) errs.name = "Name is required";
-    if (!email.trim()) errs.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email)) errs.email = "Invalid email format";
-    if (!password) errs.password = "Password is required";
-    else if (password.length < 6) errs.password = "Minimum 6 characters";
-    if (password !== confirmPassword) errs.confirmPassword = "Passwords do not match";
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
-  };
+  const { signup, loginWithGoogle } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
-    setLoading(true);
     try {
+      setLoading(true);
       await signup(email, password, name);
       toast.success("Account created successfully!");
-      router.push("/");
-    } catch (err) {
-      const msg = err.code === "auth/email-already-in-use" ? "Email already in use" : "Registration failed. Please try again.";
-      toast.error(msg);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogle = async () => {
-    setLoading(true);
-    try {
-      await loginWithGoogle();
-      toast.success("Welcome!");
-      router.push("/");
+      router.push("/items/manage");
     } catch {
-      toast.error("Google sign-in failed");
+      toast.error("Failed to create account.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center px-4 py-20 min-h-[calc(100vh-10rem)]">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
-          <p className="text-slate-400">Join SkillForge and start learning today</p>
+    <div className="auth-wrapper">
+      <div className="form-card" style={{ maxWidth: "28rem" }}>
+        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+          <h1 style={{ fontSize: "1.875rem", fontWeight: 700, color: "white", marginBottom: "0.5rem" }}>Create Account</h1>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>Join SkillForge and start learning</p>
         </div>
 
-        <div className="p-6 md:p-8 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
-          <button onClick={handleGoogle} disabled={loading} className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-xl text-sm font-medium text-white hover:bg-white/[0.08] transition-all duration-200 mb-6 cursor-pointer disabled:opacity-50">
-            <FcGoogle className="w-5 h-5" />
-            Continue with Google
-          </button>
-
-          <div className="flex items-center gap-3 mb-6">
-            <div className="flex-1 h-px bg-white/[0.06]" />
-            <span className="text-xs text-slate-500">or sign up with email</span>
-            <div className="flex-1 h-px bg-white/[0.06]" />
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Full Name</label>
+            <div style={{ position: "relative" }}>
+              <div style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }}>
+                <HiOutlineUser size={20} />
+              </div>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="John Doe"
+                className="form-input"
+                style={{ paddingLeft: "3rem" }}
+                required
+              />
+            </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Full Name</label>
-              <div className="relative">
-                <HiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="John Doe" className={`w-full pl-10 pr-4 py-3 bg-white/[0.02] border ${errors.name ? "border-red-500/50" : "border-white/[0.08]"} rounded-xl text-white placeholder:text-slate-600 text-sm focus:outline-none focus:border-violet-500/50 transition-colors`} />
+          <div className="form-group">
+            <label className="form-label">Email Address</label>
+            <div style={{ position: "relative" }}>
+              <div style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }}>
+                <HiOutlineMail size={20} />
               </div>
-              {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name}</p>}
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="form-input"
+                style={{ paddingLeft: "3rem" }}
+                required
+              />
             </div>
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
-              <div className="relative">
-                <HiOutlineMail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className={`w-full pl-10 pr-4 py-3 bg-white/[0.02] border ${errors.email ? "border-red-500/50" : "border-white/[0.08]"} rounded-xl text-white placeholder:text-slate-600 text-sm focus:outline-none focus:border-violet-500/50 transition-colors`} />
+          <div className="form-group">
+            <label className="form-label">Password</label>
+            <div style={{ position: "relative" }}>
+              <div style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }}>
+                <HiOutlineLockClosed size={20} />
               </div>
-              {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="form-input"
+                style={{ paddingLeft: "3rem" }}
+                required
+                minLength={6}
+              />
             </div>
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
-              <div className="relative">
-                <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min 6 characters" className={`w-full pl-10 pr-10 py-3 bg-white/[0.02] border ${errors.password ? "border-red-500/50" : "border-white/[0.08]"} rounded-xl text-white placeholder:text-slate-600 text-sm focus:outline-none focus:border-violet-500/50 transition-colors`} />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer">
-                  {showPassword ? <HiOutlineEyeOff className="w-5 h-5" /> : <HiOutlineEye className="w-5 h-5" />}
-                </button>
-              </div>
-              {errors.password && <p className="text-xs text-red-400 mt-1">{errors.password}</p>}
-            </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btn-primary"
+            style={{ width: "100%", padding: "0.875rem", marginTop: "1rem" }}
+          >
+            {loading ? "Creating account..." : "Sign Up"}
+          </button>
+        </form>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Confirm Password</label>
-              <div className="relative">
-                <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm your password" className={`w-full pl-10 pr-4 py-3 bg-white/[0.02] border ${errors.confirmPassword ? "border-red-500/50" : "border-white/[0.08]"} rounded-xl text-white placeholder:text-slate-600 text-sm focus:outline-none focus:border-violet-500/50 transition-colors`} />
-              </div>
-              {errors.confirmPassword && <p className="text-xs text-red-400 mt-1">{errors.confirmPassword}</p>}
-            </div>
-
-            <button type="submit" disabled={loading} className="w-full py-3 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-cyan-600 rounded-xl hover:from-violet-500 hover:to-cyan-500 transition-all duration-200 shadow-lg shadow-violet-500/25 disabled:opacity-50 cursor-pointer">
-              {loading ? "Creating account..." : "Create Account"}
-            </button>
-          </form>
+        <div style={{ margin: "2rem 0", display: "flex", alignItems: "center", gap: "1rem" }}>
+          <div style={{ flex: 1, height: "1px", background: "var(--border-subtle)" }}></div>
+          <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Or continue with</span>
+          <div style={{ flex: 1, height: "1px", background: "var(--border-subtle)" }}></div>
         </div>
 
-        <p className="text-center text-sm text-slate-400 mt-6">
+        <button
+          onClick={async () => {
+            try {
+              setLoading(true);
+              await loginWithGoogle();
+              toast.success("Welcome!");
+              router.push("/items/manage");
+            } catch {
+              toast.error("Google sign in failed.");
+            } finally {
+              setLoading(false);
+            }
+          }}
+          disabled={loading}
+          className="btn"
+          style={{ width: "100%", padding: "0.875rem", background: "rgba(255, 255, 255, 0.04)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem" }}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Google
+        </button>
+
+        <p style={{ textAlign: "center", marginTop: "2rem", fontSize: "0.875rem", color: "var(--text-secondary)" }}>
           Already have an account?{" "}
-          <Link href="/login" className="text-violet-400 hover:text-violet-300 font-medium">Sign in</Link>
+          <Link href="/login" style={{ color: "var(--color-violet-light)", fontWeight: 500, textDecoration: "none" }}>
+            Log in
+          </Link>
         </p>
       </div>
     </div>

@@ -20,7 +20,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} h-full`}>
-      <body className="min-h-screen flex flex-col font-[family-name:var(--font-inter)] antialiased bg-[#0a0a0f] text-white">
+      <body className="app-container">
         <AuthProvider>
           <Toaster
             position="top-center"
@@ -48,7 +48,7 @@ export default function RootLayout({ children }) {
             }}
           />
           <Navbar />
-          <main className="flex-1 w-full pt-16 md:pt-20">{children}</main>
+          <main className="main-content">{children}</main>
           <Footer />
         </AuthProvider>
       </body>

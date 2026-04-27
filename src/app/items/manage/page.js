@@ -5,6 +5,7 @@ import Link from "next/link";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import toast from "react-hot-toast";
 import { HiOutlineEye, HiOutlineTrash, HiOutlinePlusCircle } from "react-icons/hi";
+import "./manage.css";
 
 function ManageItemsContent() {
   const [courses, setCourses] = useState([]);
@@ -24,65 +25,65 @@ function ManageItemsContent() {
   };
 
   return (
-    <div className="py-16 md:py-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div className="section">
+      <div className="container container-sm" style={{ maxWidth: "64rem" }}>
+        <div className="manage-header">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-1">Manage Courses</h1>
-            <p className="text-slate-400 text-sm">{courses.length} course{courses.length !== 1 ? "s" : ""} added</p>
+            <h1 className="manage-title">Manage Courses</h1>
+            <p className="manage-subtitle">{courses.length} course{courses.length !== 1 ? "s" : ""} added</p>
           </div>
-          <Link href="/items/add" className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-violet-600 to-cyan-600 rounded-xl hover:from-violet-500 hover:to-cyan-500 transition-all shadow-lg shadow-violet-500/25">
-            <HiOutlinePlusCircle className="w-4 h-4" /> Add Course
+          <Link href="/items/add" className="btn btn-primary" style={{ padding: "0.625rem 1.25rem", fontSize: "0.875rem" }}>
+            <HiOutlinePlusCircle size={18} /> Add Course
           </Link>
         </div>
 
         {courses.length === 0 ? (
-          <div className="text-center py-20 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-            <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mx-auto mb-4">
-              <HiOutlinePlusCircle className="w-8 h-8 text-slate-500" />
+          <div className="empty-state" style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-2xl)" }}>
+            <div className="empty-icon-box">
+              <HiOutlinePlusCircle size={32} />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">No courses yet</h3>
-            <p className="text-slate-400 text-sm mb-6">Start by adding your first course.</p>
-            <Link href="/items/add" className="px-6 py-2.5 text-sm font-medium text-white bg-violet-600 rounded-lg hover:bg-violet-500 transition-colors">
+            <h3 className="empty-title">No courses yet</h3>
+            <p className="empty-desc">Start by adding your first course.</p>
+            <Link href="/items/add" className="btn btn-primary">
               Add Your First Course
             </Link>
           </div>
         ) : (
           <>
             {/* Desktop Table */}
-            <div className="hidden md:block rounded-2xl bg-white/[0.02] border border-white/[0.06] overflow-hidden">
-              <table className="w-full">
+            <div className="table-container">
+              <table className="data-table">
                 <thead>
-                  <tr className="border-b border-white/[0.06]">
-                    <th className="text-left text-xs font-medium text-slate-400 uppercase tracking-wider px-6 py-4">Course</th>
-                    <th className="text-left text-xs font-medium text-slate-400 uppercase tracking-wider px-6 py-4">Category</th>
-                    <th className="text-left text-xs font-medium text-slate-400 uppercase tracking-wider px-6 py-4">Price</th>
-                    <th className="text-right text-xs font-medium text-slate-400 uppercase tracking-wider px-6 py-4">Actions</th>
+                  <tr>
+                    <th>Course</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th style={{ textAlign: "right" }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {courses.map((course) => (
-                    <tr key={course.id} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <img src={course.image} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
+                    <tr key={course.id}>
+                      <td>
+                        <div className="course-cell">
+                          <img src={course.image} alt="" className="course-cell-img" />
                           <div>
-                            <p className="text-sm font-medium text-white line-clamp-1">{course.title}</p>
-                            <p className="text-xs text-slate-500 line-clamp-1">{course.shortDescription}</p>
+                            <p className="course-cell-title">{course.title}</p>
+                            <p className="course-cell-desc">{course.shortDescription}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <span className="px-2.5 py-1 text-xs bg-violet-500/10 text-violet-300 rounded-full">{course.category}</span>
+                      <td>
+                        <span className="badge-glass badge-glass-violet" style={{ border: "none" }}>{course.category}</span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-white">${course.price}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center justify-end gap-2">
-                          <Link href={`/items/${course.id}`} className="p-2 rounded-lg bg-white/[0.04] border border-white/[0.06] text-slate-400 hover:text-white hover:border-white/[0.12] transition-all" title="View">
-                            <HiOutlineEye className="w-4 h-4" />
+                      <td style={{ fontSize: "0.875rem", color: "white" }}>${course.price}</td>
+                      <td>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5rem" }}>
+                          <Link href={`/items/${course.id}`} className="action-btn" title="View">
+                            <HiOutlineEye size={16} />
                           </Link>
-                          <button onClick={() => setDeleteId(course.id)} className="p-2 rounded-lg bg-red-500/[0.06] border border-red-500/10 text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all cursor-pointer" title="Delete">
-                            <HiOutlineTrash className="w-4 h-4" />
+                          <button onClick={() => setDeleteId(course.id)} className="action-btn danger" title="Delete">
+                            <HiOutlineTrash size={16} />
                           </button>
                         </div>
                       </td>
@@ -93,22 +94,22 @@ function ManageItemsContent() {
             </div>
 
             {/* Mobile Cards */}
-            <div className="md:hidden space-y-3">
+            <div className="mobile-cards">
               {courses.map((course) => (
-                <div key={course.id} className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06]">
-                  <div className="flex items-start gap-3 mb-3">
-                    <img src={course.image} alt="" className="w-14 h-14 rounded-lg object-cover" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white line-clamp-1">{course.title}</p>
-                      <p className="text-xs text-slate-500 mt-0.5">{course.category}</p>
-                      <p className="text-sm font-semibold gradient-text mt-1">${course.price}</p>
+                <div key={course.id} className="mobile-card">
+                  <div className="mobile-card-header">
+                    <img src={course.image} alt="" className="mobile-card-img" />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p className="course-cell-title" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{course.title}</p>
+                      <p className="course-cell-desc">{course.category}</p>
+                      <p className="mobile-card-price">${course.price}</p>
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Link href={`/items/${course.id}`} className="flex-1 py-2 text-center text-xs font-medium text-slate-300 bg-white/[0.04] border border-white/[0.06] rounded-lg hover:bg-white/[0.08] transition-colors">
+                  <div className="mobile-card-actions">
+                    <Link href={`/items/${course.id}`} className="btn btn-secondary" style={{ flex: 1, fontSize: "0.75rem", padding: "0.5rem" }}>
                       View
                     </Link>
-                    <button onClick={() => setDeleteId(course.id)} className="flex-1 py-2 text-center text-xs font-medium text-red-400 bg-red-500/[0.06] border border-red-500/10 rounded-lg hover:bg-red-500/10 transition-colors cursor-pointer">
+                    <button onClick={() => setDeleteId(course.id)} className="btn" style={{ flex: 1, fontSize: "0.75rem", padding: "0.5rem", background: "rgba(239, 68, 68, 0.06)", border: "1px solid rgba(239, 68, 68, 0.1)", color: "var(--color-red)" }}>
                       Delete
                     </button>
                   </div>
@@ -120,15 +121,15 @@ function ManageItemsContent() {
 
         {/* Delete Confirmation Modal */}
         {deleteId && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div className="w-full max-w-sm p-6 rounded-2xl bg-[#141420] border border-white/[0.08]">
-              <h3 className="text-lg font-semibold text-white mb-2">Delete Course?</h3>
-              <p className="text-sm text-slate-400 mb-6">This action cannot be undone.</p>
-              <div className="flex gap-3">
-                <button onClick={() => setDeleteId(null)} className="flex-1 py-2.5 text-sm font-medium text-slate-300 bg-white/[0.04] border border-white/[0.06] rounded-xl hover:bg-white/[0.08] transition-colors cursor-pointer">
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3 className="modal-title">Delete Course?</h3>
+              <p className="modal-desc">This action cannot be undone.</p>
+              <div className="modal-actions">
+                <button onClick={() => setDeleteId(null)} className="btn btn-secondary" style={{ flex: 1 }}>
                   Cancel
                 </button>
-                <button onClick={() => handleDelete(deleteId)} className="flex-1 py-2.5 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-500 transition-colors cursor-pointer">
+                <button onClick={() => handleDelete(deleteId)} className="btn" style={{ flex: 1, background: "var(--color-red)", color: "white" }}>
                   Delete
                 </button>
               </div>

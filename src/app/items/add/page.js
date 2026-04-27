@@ -68,7 +68,7 @@ function AddItemForm() {
       localStorage.setItem("skillforge_courses", JSON.stringify(existing));
 
       toast.success("Course added successfully!");
-      setForm({ title: "", shortDescription: "", fullDescription: "", price: "", category: "Web Development", image: "" });
+      router.push("/items/manage");
     } catch {
       toast.error("Failed to add course");
     } finally {
@@ -76,59 +76,113 @@ function AddItemForm() {
     }
   };
 
-  const inputClass = (field) =>
-    `w-full px-4 py-3 bg-white/[0.02] border ${errors[field] ? "border-red-500/50" : "border-white/[0.08]"} rounded-xl text-white placeholder:text-slate-600 text-sm focus:outline-none focus:border-violet-500/50 transition-colors`;
+  const getInputStyle = (field) => {
+    return errors[field] ? { borderColor: "rgba(239, 68, 68, 0.5)" } : {};
+  };
 
   return (
-    <div className="py-16 md:py-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-2">Add New Course</h1>
-        <p className="text-slate-400 mb-8">Fill in the details to create a new course listing.</p>
+    <div className="section">
+      <div className="container container-sm" style={{ maxWidth: "48rem" }}>
+        <h1 style={{ fontSize: "1.875rem", fontWeight: 700, color: "white", marginBottom: "0.5rem" }}>Add New Course</h1>
+        <p style={{ color: "var(--text-secondary)", marginBottom: "2rem" }}>Fill in the details to create a new course listing.</p>
 
-        <form onSubmit={handleSubmit} className="p-6 md:p-8 rounded-2xl bg-white/[0.03] border border-white/[0.06] space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Course Title *</label>
-            <input type="text" name="title" value={form.title} onChange={handleChange} placeholder="e.g., Advanced JavaScript Patterns" className={inputClass("title")} />
-            {errors.title && <p className="text-xs text-red-400 mt-1">{errors.title}</p>}
+        <form onSubmit={handleSubmit} className="form-card" style={{ maxWidth: "100%", padding: "2rem" }}>
+          <div className="form-group">
+            <label className="form-label">Course Title *</label>
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              placeholder="e.g., Advanced JavaScript Patterns"
+              className="form-input"
+              style={getInputStyle("title")}
+            />
+            {errors.title && <p style={{ fontSize: "0.75rem", color: "var(--color-red)", marginTop: "0.25rem" }}>{errors.title}</p>}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Short Description *</label>
-            <input type="text" name="shortDescription" value={form.shortDescription} onChange={handleChange} placeholder="A brief overview (1-2 lines)" className={inputClass("shortDescription")} />
-            {errors.shortDescription && <p className="text-xs text-red-400 mt-1">{errors.shortDescription}</p>}
+          <div className="form-group">
+            <label className="form-label">Short Description *</label>
+            <input
+              type="text"
+              name="shortDescription"
+              value={form.shortDescription}
+              onChange={handleChange}
+              placeholder="A brief overview (1-2 lines)"
+              className="form-input"
+              style={getInputStyle("shortDescription")}
+            />
+            {errors.shortDescription && <p style={{ fontSize: "0.75rem", color: "var(--color-red)", marginTop: "0.25rem" }}>{errors.shortDescription}</p>}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Full Description *</label>
-            <textarea name="fullDescription" value={form.fullDescription} onChange={handleChange} placeholder="Detailed course description..." rows={4} className={inputClass("fullDescription") + " resize-none"} />
-            {errors.fullDescription && <p className="text-xs text-red-400 mt-1">{errors.fullDescription}</p>}
+          <div className="form-group">
+            <label className="form-label">Full Description *</label>
+            <textarea
+              name="fullDescription"
+              value={form.fullDescription}
+              onChange={handleChange}
+              placeholder="Detailed course description..."
+              rows={4}
+              className="form-input"
+              style={{ ...getInputStyle("fullDescription"), resize: "vertical", minHeight: "100px" }}
+            />
+            {errors.fullDescription && <p style={{ fontSize: "0.75rem", color: "var(--color-red)", marginTop: "0.25rem" }}>{errors.fullDescription}</p>}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem", marginBottom: "1.25rem" }}>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Price ($) *</label>
-              <input type="number" name="price" value={form.price} onChange={handleChange} placeholder="49.99" step="0.01" min="0" className={inputClass("price")} />
-              {errors.price && <p className="text-xs text-red-400 mt-1">{errors.price}</p>}
+              <label className="form-label">Price ($) *</label>
+              <input
+                type="number"
+                name="price"
+                value={form.price}
+                onChange={handleChange}
+                placeholder="49.99"
+                step="0.01"
+                min="0"
+                className="form-input"
+                style={getInputStyle("price")}
+              />
+              {errors.price && <p style={{ fontSize: "0.75rem", color: "var(--color-red)", marginTop: "0.25rem" }}>{errors.price}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Category *</label>
-              <select name="category" value={form.category} onChange={handleChange} className={inputClass("category") + " cursor-pointer"}>
+              <label className="form-label">Category *</label>
+              <select
+                name="category"
+                value={form.category}
+                onChange={handleChange}
+                className="form-input"
+                style={{ ...getInputStyle("category"), appearance: "none", cursor: "pointer", backgroundImage: 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")', backgroundPosition: "right 1rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.25em 1.25em", paddingRight: "2.5rem" }}
+              >
                 {categories.filter((c) => c !== "All").map((cat) => (
-                  <option key={cat} value={cat} className="bg-[#141420]">{cat}</option>
+                  <option key={cat} value={cat} style={{ background: "#141420" }}>{cat}</option>
                 ))}
               </select>
-              {errors.category && <p className="text-xs text-red-400 mt-1">{errors.category}</p>}
+              {errors.category && <p style={{ fontSize: "0.75rem", color: "var(--color-red)", marginTop: "0.25rem" }}>{errors.category}</p>}
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">
-              <HiOutlinePhotograph className="inline w-4 h-4 mr-1" /> Image URL (optional)
+          <div className="form-group">
+            <label className="form-label" style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+              <HiOutlinePhotograph size={16} /> Image URL (optional)
             </label>
-            <input type="url" name="image" value={form.image} onChange={handleChange} placeholder="https://example.com/image.jpg" className={inputClass("image")} />
+            <input
+              type="url"
+              name="image"
+              value={form.image}
+              onChange={handleChange}
+              placeholder="https://example.com/image.jpg"
+              className="form-input"
+              style={getInputStyle("image")}
+            />
           </div>
 
-          <button type="submit" disabled={loading} className="w-full py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-cyan-600 rounded-xl hover:from-violet-500 hover:to-cyan-500 transition-all duration-200 shadow-lg shadow-violet-500/25 disabled:opacity-50 cursor-pointer">
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btn-primary"
+            style={{ width: "100%", padding: "1rem", marginTop: "1rem", fontSize: "1rem" }}
+          >
             {loading ? "Adding Course..." : "Add Course"}
           </button>
         </form>
