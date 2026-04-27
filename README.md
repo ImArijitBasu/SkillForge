@@ -100,7 +100,7 @@ src/
 
 ## Live Demo
 
-🔗 [Live on Vercel](https://skillforge.vercel.app)
+🔗 [Live on Vercel](https://skillforge-bd.vercel.app)
 
 ---
 
