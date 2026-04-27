@@ -3,7 +3,7 @@ import { HiOutlineLightBulb, HiOutlineHeart, HiOutlineGlobe } from "react-icons/
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen py-12 md:py-20 px-4">
+    <div className="py-16 md:py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">

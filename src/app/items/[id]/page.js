@@ -18,8 +18,8 @@ export default async function ItemDetailPage({ params }) {
     .slice(0, 3);
 
   return (
-    <div className="min-h-screen py-8 md:py-12 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="py-16 md:py-24 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         <Link
           href="/items"
           className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors mb-8 group"

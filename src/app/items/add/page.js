@@ -80,7 +80,7 @@ function AddItemForm() {
     `w-full px-4 py-3 bg-white/[0.02] border ${errors[field] ? "border-red-500/50" : "border-white/[0.08]"} rounded-xl text-white placeholder:text-slate-600 text-sm focus:outline-none focus:border-violet-500/50 transition-colors`;
 
   return (
-    <div className="min-h-screen py-8 md:py-12 px-4">
+    <div className="py-16 md:py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold text-white mb-2">Add New Course</h1>
         <p className="text-slate-400 mb-8">Fill in the details to create a new course listing.</p>

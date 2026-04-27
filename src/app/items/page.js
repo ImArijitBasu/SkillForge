@@ -75,7 +75,7 @@ export default function ItemsPage() {
     searchQuery || selectedCategory !== "All" || priceRange !== "All";
 
   return (
-    <div className="min-h-screen py-8 md:py-12 px-4">
+    <div className="py-16 md:py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-10">

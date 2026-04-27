@@ -24,7 +24,7 @@ function ManageItemsContent() {
   };
 
   return (
-    <div className="min-h-screen py-8 md:py-12 px-4">
+    <div className="py-16 md:py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
